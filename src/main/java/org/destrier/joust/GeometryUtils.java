@@ -30,7 +30,10 @@ public class GeometryUtils {
      */
     public static double perpendicularDistance(Point t, Point p1, Point p2) {
         if (p1 == null || p2 == null || p1.equals(p2))
-            throw new IllegalArgumentException("Points must be not null and different");
+            throw new IllegalArgumentException("One of line points is null or the same.");
+
+        if (t == null)
+            throw new IllegalArgumentException("Target point is null");
 
         double y1 = p1.getY();
         double y2 = p2.getY();
@@ -39,7 +42,6 @@ public class GeometryUtils {
         double x0 = t.getX();
         double y0 = t.getY();
 
-        return Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) /
-                euclideanDistance(p1, p2);
+        return Math.abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1) / euclideanDistance(p1, p2);
     }
 }

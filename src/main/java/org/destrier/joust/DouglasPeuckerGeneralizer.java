@@ -22,7 +22,7 @@ public final class DouglasPeuckerGeneralizer implements Generalizer {
         Arrays.fill(keep, true);
 
         Stack<Pair<Integer, Integer>> stack = new Stack<>();
-        stack.push(Pair.create(0, polyline.size() - 1));
+        stack.push(Pair.create(0, polyline.size() - 1)); // put border indices of list on stack.
 
         while (!stack.isEmpty()) {
             int startIndex = stack.peek().getFirst();
