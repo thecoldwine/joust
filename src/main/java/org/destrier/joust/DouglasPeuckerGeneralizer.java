@@ -17,7 +17,10 @@ public final class DouglasPeuckerGeneralizer implements Generalizer {
         this.epsilon = epsilon;
     }
 
-    protected List<Point> simplify(List<Point> polyline, double epsilon) {
+    private static List<Point> simplify(List<Point> polyline, double epsilon) {
+        if (polyline.size() < 3)
+            return polyline;
+
         boolean[] keep = new boolean[polyline.size()];
         Arrays.fill(keep, true);
 
