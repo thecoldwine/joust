@@ -21,13 +21,13 @@ public final class DouglasPeuckerGeneralizer implements Generalizer {
         boolean[] keep = new boolean[polyline.size()];
         Arrays.fill(keep, true);
 
-        Stack<Pair<Integer, Integer>> stack = new Stack<>();
-        stack.push(Pair.create(0, polyline.size() - 1)); // put border indices of list on stack.
+        Stack<Pair<Integer, Integer>> indicesStack = new Stack<>();
+        indicesStack.push(Pair.create(0, polyline.size() - 1)); // put the border indices of list on stack.
 
-        while (!stack.isEmpty()) {
-            int startIndex = stack.peek().getFirst();
-            int endIndex = stack.peek().getSecond();
-            stack.pop();
+        while (!indicesStack.isEmpty()) {
+            int startIndex = indicesStack.peek().getFirst();
+            int endIndex = indicesStack.peek().getSecond();
+            indicesStack.pop();
 
             double maxDistance = 0;
             int index = startIndex;
@@ -47,8 +47,8 @@ public final class DouglasPeuckerGeneralizer implements Generalizer {
             }
 
             if (maxDistance >= epsilon) {
-                stack.push(Pair.create(startIndex, index));
-                stack.push(Pair.create(index, endIndex));
+                indicesStack.push(Pair.create(startIndex, index));
+                indicesStack.push(Pair.create(index, endIndex));
             } else {
                 for (int i = startIndex + 1; i < endIndex; i++) {
                     keep[i] = false;
