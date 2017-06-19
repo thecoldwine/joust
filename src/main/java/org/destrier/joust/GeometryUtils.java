@@ -1,6 +1,8 @@
 package org.destrier.joust;
 
 /**
+ * Geometry utility class.
+ *
  * Created by Mikhail Aksenov.
  * 2017-06-16
  * org.destrier.joust
