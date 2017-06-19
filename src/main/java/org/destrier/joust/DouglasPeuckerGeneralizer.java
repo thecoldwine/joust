@@ -1,5 +1,7 @@
 package org.destrier.joust;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -16,36 +18,52 @@ public final class DouglasPeuckerGeneralizer implements Generalizer {
     }
 
     protected List<Point> simplify(List<Point> polyline, double epsilon) {
-        Stack<List<Point>> callStack = new Stack<>();
+        boolean[] keep = new boolean[polyline.size()];
+        Arrays.fill(keep, true);
 
-        callStack.push(polyline);
+        Stack<Pair<Integer, Integer>> stack = new Stack<>();
+        stack.push(Pair.create(0, polyline.size() - 1));
 
-        while (!callStack.isEmpty()) {
-            List<Point> points = callStack.pop();
+        while (!stack.isEmpty()) {
+            int startIndex = stack.peek().getFirst();
+            int endIndex = stack.peek().getSecond();
+            stack.pop();
 
             double maxDistance = 0;
-            int index = 0;
-            int end = points.size() - 1;
+            int index = startIndex;
 
-            for (int i = 0; i < end - 1; i++) {
-                double distance = GeometryUtils.perpendecularDistance(points.get(0), points.get(end), points.get(i));
-                if (distance > maxDistance) {
-                    index = i;
-                    maxDistance = distance;
+            for (int i = startIndex + 1; i < endIndex; i++) {
+                if (keep[i]) {
+                    Point p1 = polyline.get(startIndex);
+                    Point p2 = polyline.get(endIndex);
+
+                    double d = GeometryUtils.perpendicularDistance(polyline.get(i), p1, p2);
+
+                    if (d > maxDistance) {
+                        index = i;
+                        maxDistance = d;
+                    }
                 }
             }
 
-            if (maxDistance > epsilon) {
-                callStack.push(points.subList(0, index));
-                callStack.push(points.subList(index, end));
-
-
+            if (maxDistance >= epsilon) {
+                stack.push(Pair.create(startIndex, index));
+                stack.push(Pair.create(index, endIndex));
             } else {
-
+                for (int i = startIndex + 1; i < endIndex; i++) {
+                    keep[i] = false;
+                }
             }
         }
 
-        return null;
+        List<Point> result = new ArrayList<>();
+
+        for (int i = 0; i < keep.length; i++) {
+            if (keep[i])
+                result.add(polyline.get(i));
+        }
+
+        return result;
     }
 
     @Override
